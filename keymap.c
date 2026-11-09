@@ -29,39 +29,39 @@ enum layers {
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [_WIN] = LAYOUT(
+    [_WIN] = LAYOUT_ortho_4x3(
                  XXXXXXX,  XXXXXXX,  XXXXXXX,
                  XXXXXXX,  XXXXXXX,  XXXXXXX,
                  XXXXXXX,  XXXXXXX,  XXXXXXX,
                  XXXXXXX,  XXXXXXX,  XXXXXXX),
 
-    [_LINUX] = LAYOUT(
+    [_LINUX] = LAYOUT_ortho_4x3(
                  XXXXXXX,  XXXXXXX,  XXXXXXX,
                  XXXXXXX,  XXXXXXX,  XXXXXXX,
                  XXXXXXX,  XXXXXXX,  XXXXXXX,
                  XXXXXXX,  XXXXXXX,  XXXXXXX),
 
     
-    [_NUMPAD] = LAYOUT(
+    [_NUMPAD] = LAYOUT_ortho_4x3(
                  XXXXXXX,     KC_0,   KC_DOT,
                     KC_7,     KC_8,     KC_9,
                     KC_4,     KC_5,     KC_6,
                     KC_1,     KC_2,     KC_3),
   
-    [_GW2] = LAYOUT(
+    [_GW2] = LAYOUT_ortho_4x3(
                  XXXXXXX,  XXXXXXX,  XXXXXXX,
                  XXXXXXX,  XXXXXXX,  XXXXXXX,
                  XXXXXXX,  XXXXXXX,  XXXXXXX,
                  XXXXXXX,  XXXXXXX,  XXXXXXX),
 
-    [_RGB] = LAYOUT(
-                 XXXXXXX,  RGB_MOD, RGB_RMOD,
-                 RGB_TOG,  RGB_SAI,  RGB_SAD,
-                 XXXXXXX,  RGB_HUI,  RGB_HUD,
-                 XXXXXXX,  RGB_VAI,  RGB_VAD),
+    [_RGB] = LAYOUT_ortho_4x3(
+                 XXXXXXX,  UG_NEXT, UG_PREV,
+                 UG_TOGG,  UG_SATU,  UG_SATD,
+                 XXXXXXX,  UG_HUEU,  UG_HUED,
+                 XXXXXXX,  UG_VALU,  UG_VALD),
 };
 
-#ifdef OLED_DRIVER_ENABLE
+#ifdef OLED_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 	return OLED_ROTATION_180;
 }
@@ -90,8 +90,9 @@ static void render_status(void) {
   }
 }
 
-void oled_task_user(void) {
+bool oled_task_user(void) {
     render_status();
+    return false;
 }
 #endif
 
@@ -99,11 +100,9 @@ void matrix_init_user(void) {}
 
 void matrix_scan_user(void) {}
 
-void led_set_user(uint8_t usb_led) {}
-
 #ifdef ENCODER_ENABLE
 uint8_t selected_layer = 0;
-void encoder_update_user(uint8_t index, bool clockwise) {
+bool encoder_update_user(uint8_t index, bool clockwise) {
    if (index == 0) {
 		switch (index) {
 			case 0:
@@ -116,5 +115,6 @@ void encoder_update_user(uint8_t index, bool clockwise) {
 			layer_on(selected_layer);
 		}
   }
+  return false;
 }
 #endif
